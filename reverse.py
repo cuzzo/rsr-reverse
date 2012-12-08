@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 import re
 
 class InvalidParameterError(Exception):
@@ -126,7 +124,6 @@ class RSRReverser(object):
         route = route.replace(option, option[1:-1])
       else:
         route = route.replace(option, '')
-
 
   def is_reversed(self, route=None):
     route = route if route else self.get_route()
