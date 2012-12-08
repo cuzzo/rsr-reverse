@@ -40,17 +40,21 @@ class RSRReverser(object):
     return param_pattern
 
 
-  def get_option_start(self):
-    start = self.get_route().find(self.option_enclosures[0])
-    end = self.get_route().find(self.option_enclosures[1])
+  def get_option_start(self, route=None):
+    route = route if route else self.get_route()
+
+    start = route.find(self.option_enclosures[0])
+    end = route.find(self.option_enclosures[1])
     if end == -1:
       return -1
     if end < start:
       return -1
     return start
 
-  def get_option_end(self):
-    start = self.get_option_start()
+  def get_option_end(self, route=None):
+    route = route if route else self.get_route()
+
+    start = self.get_option_start(route)
     if start == -1:
       return -1
 
@@ -58,10 +62,10 @@ class RSRReverser(object):
     opts = 1
     while opts > 0:
       pos += 1  
-      if pos >= len(self.get_route()):
+      if pos >= len(route):
         return -1
 
-      char = self.get_route()[pos]
+      char = route[pos]
       if char not in self.option_enclosures:
         continue
 
@@ -73,14 +77,15 @@ class RSRReverser(object):
 
     return pos
 
-  def get_option(self):
-    op_start = self.get_option_start()
-    op_end = self.get_option_end()
+  def get_option(self, route=None):
+    route = route if route else self.get_route()
+    op_start = self.get_option_start(route)
+    op_end = self.get_option_end(route)
     if op_start == -1 or op_end == -1:
       return ''
     if op_end < op_start:
       return ''
-    return self.get_route()[op_start:op_end + 1]
+    return route[op_start:op_end + 1]
 
   def clean_parameter(self, parameter):
     parts = parameter.split(self.param_separator)
@@ -94,8 +99,8 @@ class RSRReverser(object):
       raise InvalidParameterError
     return parameter
 
-  def substitute_parameters(self, parameters):
-    substituted_route = self.get_route()
+  def substitute_parameters(self, parameters, route=None):
+    substituted_route = route if route else self.get_route()
     for param in parameters.keys():
       pattern = self._param_pattern % param
       pattern = re.compile(pattern)
@@ -106,26 +111,39 @@ class RSRReverser(object):
     return substituted_route
 
   def replace_options(self, parameters):
+    route = self.get_route()
     while True:
-      option = self.get_option()
+      option = self.get_option(route)
       if option == '':
-        return self.get_route()
-      
+        return route
+
       option_reverser = RSRReverser(option[1:-1])
-      try:
-        option_reverser.reverse(parameters)
-        sub_route = option_reverser.get_route()
-      except RouteParameterizationIrreversibleError:
-        sub_route = ''
-      route = self.get_route().replace(option, sub_route)
-      self.set_route(route)
+      replaced_route = option_reverser.replace_options(parameters)
+
+      substituted_route = option_reverser.substitute_parameters(parameters, \
+                                                            replaced_route)
+      if self.is_reversed(substituted_route):
+        route = route.replace(option, option[1:-1])
+      else:
+        route = route.replace(option, '')
+
+
+  def is_reversed(self, route=None):
+    route = route if route else self.get_route()
+    if route.find(self.option_enclosures[0]) != -1:
+      return False
+    if route.find(self.option_enclosures[1]) != -1:
+      return False
+    if route.find(self.param_enclosures[0]) != -1:
+      return False
+    if route.find(self.param_enclosures[1]) != -1:
+      return False
+    return True
 
   def reverse(self, parameters):
-    self.replace_options(parameters)
-    substituted_route = self.substitute_parameters(parameters)
-
-    if re.search('{.*?}', substituted_route):
-      raise RouteParameterizationIrreversibleError
-    self.set_route(substituted_route)
-    return self.get_route()
+    reversed_route = self.replace_options(parameters)
+    reversed_route = self.substitute_parameters(parameters, reversed_route)
+    if not self.is_reversed(reversed_route):
+       raise RouteParameterizationIrreversibleError
+    return reversed_route
 
