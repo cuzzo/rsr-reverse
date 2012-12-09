@@ -109,7 +109,7 @@ class RSRReverser(object):
                                                       parameters[param])
     return substituted_route
 
-  def replace_options(self, parameters):
+  def prune_options(self, parameters):
     route = self.get_route()
     while True:
       option = self.get_option(route)
@@ -121,10 +121,10 @@ class RSRReverser(object):
                                     param_bounds=self.param_bounds, \
                                     param_separator=self.param_separator)
 
-      replaced_route = option_reverser.replace_options(parameters)
+      pruned_route = option_reverser.prune_options(parameters)
 
       substituted_route = option_reverser.substitute_parameters(parameters, \
-                                                            replaced_route)
+                                                                pruned_route)
       if self.is_reversed(substituted_route):
         route = route.replace(option, option[1:-1])
       else:
@@ -143,8 +143,8 @@ class RSRReverser(object):
     return True
 
   def reverse(self, parameters):
-    reversed_route = self.replace_options(parameters)
-    reversed_route = self.substitute_parameters(parameters, reversed_route)
+    pruned_route = self.prune_options(parameters)
+    reversed_route = self.substitute_parameters(parameters, pruned_route)
     if not self.is_reversed(reversed_route):
        raise RouteParameterizationIrreversibleError
     return reversed_route
