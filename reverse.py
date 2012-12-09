@@ -100,9 +100,8 @@ class RSRReverser(object):
   def substitute_parameters(self, parameters, route=None):
     substituted_route = route if route else self.get_route()
     for param in parameters.keys():
-      pattern = self._param_pattern % param
-      pattern = re.compile(pattern)
-      matches = pattern.finditer(substituted_route)
+      pattern = self._param_pattern % re.escape(param)
+      matches = re.finditer(pattern, substituted_route)
       for match in matches:
         substituted_route = substituted_route.replace(match.group(), \
                                                       parameters[param])

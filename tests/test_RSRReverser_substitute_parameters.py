@@ -39,11 +39,11 @@ def test_rsrreverser_substitute_parameters_some_params():
     assert reverser.substitute_parameters(params) == sub_route
 
 def test_rsrreverser_substitute_parameters_simple_matching_invalid():
-    reverser = RSRReverser('/test/{_p1}/{_p2}/{_p3}')
+    reverser = RSRReverser('/test/{_p1}/{p2;}/{p^3}')
     params = {
         '_p1': 'these',
-        '_p2': 'are',
-        '_p3': 'invalid_but_match',
+        'p2;': 'are',
+        'p^3': 'invalid_but_match',
     }
     sub_route = '/test/these/are/invalid_but_match'
     assert reverser.substitute_parameters(params) == sub_route
