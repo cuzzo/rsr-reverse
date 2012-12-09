@@ -6,6 +6,8 @@ class InvalidParameterError(Exception):
 class RouteParameterizationIrreversibleError(Exception):
   """ """
 
+RSR_TYPE_PATTERN = '(%s[a-zA-Z0-9]*)?'
+
 class RSRReverser(object):
   option_bounds = '[]'
   param_bounds = '{}'
@@ -31,7 +33,7 @@ class RSRReverser(object):
     return self._route
 
   def extrapolate_param_pattern(self):
-    type_pattern = '(%s[a-zA-Z0-9]*)?' % self.param_separator
+    type_pattern = RSR_TYPE_PATTERN % self.param_separator
     param_pattern = '%s%%s%s%s' % (self.param_bounds[0], \
                                    type_pattern, \
                                    self.param_bounds[1])
