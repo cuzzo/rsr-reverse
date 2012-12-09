@@ -4,11 +4,13 @@ RSR_TYPE_PATTERN = '(%s[a-zA-Z0-9]*)?'
 
 
 class InvalidParameterError(Exception):
-    """ """
+    """Raised to signal an encounter with a syntactically invalid parameter.
+    """
 
 
 class RouteParameterizationIrreversibleError(Exception):
-    """ """
+    """Raised to signal an error while attempting to reverse a route due
+    an unsupplied required parameter."""
 
 
 class RSRReverser(object):
