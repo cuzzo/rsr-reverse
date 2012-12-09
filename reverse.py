@@ -7,16 +7,16 @@ class RouteParameterizationIrreversibleError(Exception):
   """ """
 
 class RSRReverser(object):
-  option_enclosures = '[]'
-  param_enclosures = '{}'
+  option_bounds = '[]'
+  param_bounds = '{}'
   param_separator = ':'
   
-  def __init__(self, route, option_enclosures=None, param_enclosures=None, \
+  def __init__(self, route, option_bounds=None, param_bounds=None, \
                param_separator=None):
 
     self._route = route
-    self.option_enclosures = self.pick('option_enclosures', option_enclosures)
-    self.param_enclosures = self.pick('param_enclosures', param_enclosures)
+    self.option_bounds = self.pick('option_bounds', option_bounds)
+    self.param_bounds = self.pick('param_bounds', param_bounds)
     self.param_separator = self.pick('param_separator', param_separator)
     self._param_pattern = self.extrapolate_param_pattern()
 
@@ -32,17 +32,17 @@ class RSRReverser(object):
 
   def extrapolate_param_pattern(self):
     type_pattern = '(%s[a-zA-Z0-9]*)?' % self.param_separator
-    param_pattern = '%s%%s%s%s' % (self.param_enclosures[0], \
-                                         type_pattern, \
-                                         self.param_enclosures[1])
+    param_pattern = '%s%%s%s%s' % (self.param_bounds[0], \
+                                   type_pattern, \
+                                   self.param_bounds[1])
     return param_pattern
 
 
   def get_option_start(self, route=None):
     route = route if route else self.get_route()
 
-    start = route.find(self.option_enclosures[0])
-    end = route.find(self.option_enclosures[1])
+    start = route.find(self.option_bounds[0])
+    end = route.find(self.option_bounds[1])
     if end == -1:
       return -1
     if end < start:
@@ -64,13 +64,13 @@ class RSRReverser(object):
         return -1
 
       char = route[pos]
-      if char not in self.option_enclosures:
+      if char not in self.option_bounds:
         continue
 
-      if char == self.option_enclosures[0]:
+      if char == self.option_bounds[0]:
         opts += 1
 
-      if char == self.option_enclosures[1]:
+      if char == self.option_bounds[1]:
         opts -=1
 
     return pos
@@ -126,13 +126,13 @@ class RSRReverser(object):
 
   def is_reversed(self, route=None):
     route = route if route else self.get_route()
-    if route.find(self.option_enclosures[0]) != -1:
+    if route.find(self.option_bounds[0]) != -1:
       return False
-    if route.find(self.option_enclosures[1]) != -1:
+    if route.find(self.option_bounds[1]) != -1:
       return False
-    if route.find(self.param_enclosures[0]) != -1:
+    if route.find(self.param_bounds[0]) != -1:
       return False
-    if route.find(self.param_enclosures[1]) != -1:
+    if route.find(self.param_bounds[1]) != -1:
       return False
     return True
 
