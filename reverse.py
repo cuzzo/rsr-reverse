@@ -114,7 +114,11 @@ class RSRReverser(object):
       if option == '':
         return route
 
-      option_reverser = RSRReverser(option[1:-1])
+      option_reverser = RSRReverser(option[1:-1],
+                                    option_bounds=self.option_bounds, \
+                                    param_bounds=self.param_bounds, \
+                                    param_separator=self.param_separator)
+
       replaced_route = option_reverser.replace_options(parameters)
 
       substituted_route = option_reverser.substitute_parameters(parameters, \

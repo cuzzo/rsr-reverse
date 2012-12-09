@@ -77,3 +77,14 @@ def test_rsrreverser_replace_options_invalid():
     replaced_route = '/test/{_o1}/{o2;}/{o^3}'
     assert reverser.replace_options(params) == replaced_route
 
+def test_rsrreverser_replace_options_nested_custom():
+    route = '/test</=option1;</=option2;</=option3;>>>'
+    reverser = RSRReverser(route, option_bounds='<>', param_bounds='=;')
+    params = {
+        'option1': 'custom',
+        'option2': 'bounds',
+        'option3': 'are_fun',
+    }
+    replaced_route = '/test/=option1;/=option2;/=option3;'
+    assert reverser.replace_options(params) == replaced_route
+

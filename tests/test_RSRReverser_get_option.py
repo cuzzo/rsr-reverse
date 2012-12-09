@@ -36,3 +36,7 @@ def test_rsrreverser_get_option_ilformat():
   reverser = RSRReverser('/test]/sep[/{good_option}]')
   assert reverser.get_option() == ''
 
+def test_rsrreverser_get_option_custom():
+  reverser = RSRReverser('test[/{fake_out}]</{option}>', option_bounds='<>')
+  assert reverser.get_option() == '</{option}>'
+

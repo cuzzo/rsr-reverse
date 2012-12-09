@@ -104,3 +104,11 @@ def test_rsrreverser_substitute_parameters_url_matches():
     }
     assert reverser.substitute_parameters(params) == route
 
+def test_rsrreverser_substitute_parameters_custom():
+    reverser = RSRReverser('/test/{param}/<param>', param_bounds='<>')
+    params = {
+        'param': 'fake_out',
+    }
+    reversed_url = '/test/{param}/fake_out'
+    assert reverser.substitute_parameters(params) == reversed_url
+
