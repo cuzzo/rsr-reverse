@@ -1,5 +1,6 @@
 from reverse import RSRReverser
 
+
 def test_rsrreverser_prune_options_full():
     reverser = RSRReverser('/test[/{option1}][/{option2}][/{option3}]')
     params = {
@@ -10,6 +11,7 @@ def test_rsrreverser_prune_options_full():
     pruned_route = '/test/{option1}/{option2}/{option3}'
     assert reverser.prune_options(params) == pruned_route
 
+
 def test_rsrreverser_prune_options_some():
     reverser = RSRReverser('/test[/{option1}][/{option2}][/{option3}]')
     params = {
@@ -17,6 +19,7 @@ def test_rsrreverser_prune_options_some():
     }
     pruned_route = '/test/{option2}'
     assert reverser.prune_options(params) == pruned_route
+
 
 def test_rsrreverser_prune_options_nested():
     reverser = RSRReverser('/test[/{option1}[/{option2}]][/{option3}]')
@@ -27,6 +30,7 @@ def test_rsrreverser_prune_options_nested():
     pruned_route = '/test/{option1}/{option2}'
     assert reverser.prune_options(params) == pruned_route
 
+
 def test_rsrreverser_prune_options_nested_no_parent():
     reverser = RSRReverser('/test[/{option1}[/{option2}]][/{option3}]')
     params = {
@@ -36,6 +40,7 @@ def test_rsrreverser_prune_options_nested_no_parent():
     pruned_route = '/test/{option3}'
     assert reverser.prune_options(params) == pruned_route
 
+
 def test_rsrreverser_prune_options_nested_incomplete():
     reverser = RSRReverser('/test[/{option1}[/{option2}]][/{option3}]')
     params = {
@@ -44,6 +49,7 @@ def test_rsrreverser_prune_options_nested_incomplete():
     }
     pruned_route = '/test/{option1}/{option3}'
     assert reverser.prune_options(params) == pruned_route
+
 
 def test_rsrreverser_prune_options_none():
     reverser = RSRReverser('/test[/{option1}][/{option2}][/{option3}]')
@@ -56,6 +62,7 @@ def test_rsrreverser_prune_options_none():
     pruned_route = '/test'
     assert reverser.prune_options(params) == pruned_route
 
+
 def test_rsrreverser_prune_options_unsafe():
     reverser = RSRReverser('/test[/{option1}][/{option2}][/{option3}]')
     params = {
@@ -66,7 +73,8 @@ def test_rsrreverser_prune_options_unsafe():
     }
     pruned_route = '/test'
     assert reverser.prune_options(params) == pruned_route
-   
+
+
 def test_rsrreverser_prune_options_invalid():
     reverser = RSRReverser('/test[/{_o1}][/{o2;}][/{o^3}]')
     params = {
@@ -76,6 +84,7 @@ def test_rsrreverser_prune_options_invalid():
     }
     pruned_route = '/test/{_o1}/{o2;}/{o^3}'
     assert reverser.prune_options(params) == pruned_route
+
 
 def test_rsrreverser_prune_options_nested_custom():
     route = '/test</=option1;</=option2;</=option3;>>>'
@@ -87,4 +96,3 @@ def test_rsrreverser_prune_options_nested_custom():
     }
     pruned_route = '/test/=option1;/=option2;/=option3;'
     assert reverser.prune_options(params) == pruned_route
-

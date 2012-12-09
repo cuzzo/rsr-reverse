@@ -2,6 +2,7 @@ from nose.tools import raises
 
 from reverse import RSRReverser, RouteParameterizationIrreversibleError
 
+
 def test_rsrreverser_reverse_full_params():
     reverser = RSRReverser('/test/{param1}/{param2}/{param3}')
     params = {
@@ -11,6 +12,7 @@ def test_rsrreverser_reverse_full_params():
     }
     reversed_url = '/test/params/are/fun'
     assert reverser.reverse(params) == reversed_url
+
 
 def test_rsrreverser_reverse_full_options():
     reverser = RSRReverser('/test[/{param1}][/{param2}][/{param3}]')
@@ -22,6 +24,7 @@ def test_rsrreverser_reverse_full_options():
     reversed_url = '/test/options/are/fun'
     assert reverser.reverse(params) == reversed_url
 
+
 def test_rsrreverser_reverse_full_params_and_options():
     reverser = RSRReverser('/test[/{param1}]/{param2}[/{param3}]')
     params = {
@@ -31,6 +34,7 @@ def test_rsrreverser_reverse_full_params_and_options():
     }
     reversed_url = '/test/options/and/params_are_fun'
     assert reverser.reverse(params) == reversed_url
+
 
 def test_rsrreverser_reverse_full_nested_options():
     reverser = RSRReverser('/test[/{param1}[/{param2}[/{param3}]]]')
@@ -42,6 +46,7 @@ def test_rsrreverser_reverse_full_nested_options():
     reversed_url = '/test/nested/options/are_fun'
     assert reverser.reverse(params) == reversed_url
 
+
 @raises(RouteParameterizationIrreversibleError)
 def test_rsrreverser_reverse_some_params():
     reverser = RSRReverser('/test/{param1}/{param2}/{param3}')
@@ -50,6 +55,7 @@ def test_rsrreverser_reverse_some_params():
         'param2': 'fail',
     }
     reverser.reverse(params)
+
 
 def test_rsrreverser_reverse_some_options():
     reverser = RSRReverser('/test[/{param1}][/{param2}][/{param3}]')
@@ -60,6 +66,7 @@ def test_rsrreverser_reverse_some_options():
     reversed_url = '/test/some/options'
     assert reverser.reverse(params) == reversed_url
 
+
 @raises(RouteParameterizationIrreversibleError)
 def test_rsrreverser_reverse_some_params_and_options():
     reverser = RSRReverser('/test[/{param1}]/{param2}[/{param3}]/{param4}')
@@ -68,6 +75,7 @@ def test_rsrreverser_reverse_some_params_and_options():
         'param3': 'options',
     }
     reverser.reverse(params)
+
 
 def test_rsrreverser_reverse_some_nested_options():
     route = '/test[/{param1}[/{param2}]]/sep[/{param3}[/{param4}]]'
@@ -79,6 +87,7 @@ def test_rsrreverser_reverse_some_nested_options():
     reversed_url = '/test/sep/some/nested_options'
     assert reverser.reverse(params) == reversed_url
 
+
 def test_rsrreverser_reverse_nested_option_no_parent():
     route = '/test[/{param1}[/{param2}]]/sep[/{param3}[/{param4}]]'
     reverser = RSRReverser(route)
@@ -88,6 +97,7 @@ def test_rsrreverser_reverse_nested_option_no_parent():
     }
     reversed_url = '/test/sep'
     assert reverser.reverse(params) == reversed_url
+
 
 def test_rsrreverser_reverse_nested_incomplete():
     route = '/test[/{param1}[/{param2}]]/sep[/{param3}[/{param4}]]'
@@ -99,6 +109,7 @@ def test_rsrreverser_reverse_nested_incomplete():
     reversed_url = '/test/some/sep/nested_options'
     assert reverser.reverse(params) == reversed_url
 
+
 def test_rsrreverser_reverse_none():
     route = '/test[/{param1}[/{param2}]]/sep[/{param3}[/{param4}]]'
     reverser = RSRReverser(route)
@@ -108,6 +119,7 @@ def test_rsrreverser_reverse_none():
     }
     reversed_url = '/test/some/sep/nested_options'
     assert reverser.reverse(params) == reversed_url
+
 
 def test_rsrreverser_reverse_unsafe():
     reverser = RSRReverser('/test/{param1}/{param2}/{param3}')
@@ -119,6 +131,7 @@ def test_rsrreverser_reverse_unsafe():
     reversed_url = '/test/#$%^/unsafe_/;unsafe'
     assert reverser.reverse(params) == reversed_url
 
+
 def test_rsrreverser_reverse_invalid_param():
     reverser = RSRReverser('/test/{_p1}/{p2;}/{p^3}')
     params = {
@@ -128,7 +141,8 @@ def test_rsrreverser_reverse_invalid_param():
     }
     reversed_url = '/test/invalid/but/subs'
     assert reverser.reverse(params) == reversed_url
-   
+
+
 def test_rsrreverser_reverse_invalid_option():
     reverser = RSRReverser('/test[/{_p1}][/{p2;}][/{p^3}]')
     params = {
@@ -139,6 +153,7 @@ def test_rsrreverser_reverse_invalid_option():
     reversed_url = '/test/invalid/but/subs'
     assert reverser.reverse(params) == reversed_url
 
+
 def test_rsrreverer_reverse_plain():
     route = '/test/plain/route'
     reverser = RSRReverser(route)
@@ -146,5 +161,4 @@ def test_rsrreverer_reverse_plain():
         'param1': 'test',
         'param2': 'no_sub',
     }
-    assert reverser.reverse(params) == route 
-
+    assert reverser.reverse(params) == route

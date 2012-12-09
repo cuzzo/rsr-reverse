@@ -1,5 +1,6 @@
 from reverse import RSRReverser
 
+
 def test_rsrreverser_substitute_parameters_all_params():
     reverser = RSRReverser('/test/{param1}/{param2}/{param3}')
     params = {
@@ -9,6 +10,7 @@ def test_rsrreverser_substitute_parameters_all_params():
     }
     sub_route = '/test/veni/vidi/vici'
     assert reverser.substitute_parameters(params) == sub_route
+
 
 def test_rsrreverser_substitute_parameters_all_params_with_options():
     reverser = RSRReverser('/test/{param1}[/{param2}[/{param3}]]')
@@ -20,6 +22,7 @@ def test_rsrreverser_substitute_parameters_all_params_with_options():
     sub_route = '/test/tests[/are[/fun]]'
     assert reverser.substitute_parameters(params) == sub_route
 
+
 def test_rsrreverser_substitute_parameters_complex():
     reverser = RSRReverser('/test/{param1:digits}/{param2:type}/{param3:01}')
     params = {
@@ -30,6 +33,7 @@ def test_rsrreverser_substitute_parameters_complex():
     sub_route = '/test/complex/types/sub'
     assert reverser.substitute_parameters(params) == sub_route
 
+
 def test_rsrreverser_substitute_parameters_some_params():
     reverser = RSRReverser('/test/{param1}/{param2}/{param3}')
     params = {
@@ -37,6 +41,7 @@ def test_rsrreverser_substitute_parameters_some_params():
     }
     sub_route = '/test/{param1}/lucky_number_2/{param3}'
     assert reverser.substitute_parameters(params) == sub_route
+
 
 def test_rsrreverser_substitute_parameters_simple_matching_invalid():
     reverser = RSRReverser('/test/{_p1}/{p2;}/{p^3}')
@@ -48,6 +53,7 @@ def test_rsrreverser_substitute_parameters_simple_matching_invalid():
     sub_route = '/test/these/are/invalid_but_match'
     assert reverser.substitute_parameters(params) == sub_route
 
+
 def test_rsrreverser_substitute_parameters_url_unsafe():
     reverser = RSRReverser('/test/{param1}/{param2}/{param3}')
     params = {
@@ -57,6 +63,7 @@ def test_rsrreverser_substitute_parameters_url_unsafe():
     }
     sub_route = '/test/#$%^/{param1[invalid!]}/?q=;'
     assert reverser.substitute_parameters(params) == sub_route
+
 
 def test_rsrreverser_substitute_parameters_subset_params():
     route = '/test/{param1}/{param2}/{param3}'
@@ -68,6 +75,7 @@ def test_rsrreverser_substitute_parameters_subset_params():
     }
     assert reverser.substitute_parameters(params) == route
 
+
 def test_rsrreverser_substitute_parameters_superset_params():
     route = '/test/{param1}/{param2}/{param3}'
     reverser = RSRReverser(route)
@@ -78,11 +86,13 @@ def test_rsrreverser_substitute_parameters_superset_params():
     }
     assert reverser.substitute_parameters(params) == route
 
+
 def test_rsrreverser_substitute_parameters_no_params():
     route = '/test/{param1}/{param2}/{param3}'
     reverser = RSRReverser(route)
     params = {}
     assert reverser.substitute_parameters(params) == route
+
 
 def test_rsrreverser_substitute_parameters_complex_matching_invalid():
     route = '/test/{param1:_digits}/{param2:t&}/{param3:#$*}'
@@ -94,6 +104,7 @@ def test_rsrreverser_substitute_parameters_complex_matching_invalid():
     }
     assert reverser.substitute_parameters(params) == route
 
+
 def test_rsrreverser_substitute_parameters_url_matches():
     route = '/test/this/case'
     reverser = RSRReverser(route)
@@ -104,6 +115,7 @@ def test_rsrreverser_substitute_parameters_url_matches():
     }
     assert reverser.substitute_parameters(params) == route
 
+
 def test_rsrreverser_substitute_parameters_custom():
     reverser = RSRReverser('/test/{param}/<param>', param_bounds='<>')
     params = {
@@ -111,4 +123,3 @@ def test_rsrreverser_substitute_parameters_custom():
     }
     reversed_url = '/test/{param}/fake_out'
     assert reverser.substitute_parameters(params) == reversed_url
-
