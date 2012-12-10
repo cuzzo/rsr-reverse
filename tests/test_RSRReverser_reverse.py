@@ -1,6 +1,6 @@
 from nose.tools import raises
 
-from rsr_reverse import RSRReverser, RouteParameterizationIrreversibleError
+from reverser import RSRReverser, RouteParameterizationIrreversibleError
 
 
 def test_rsrreverser_reverse_full_params():

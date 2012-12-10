@@ -1,6 +1,6 @@
 from nose.tools import raises
 
-from rsr_reverse import RSRReverser, InvalidParameterError
+from reverser import RSRReverser, InvalidParameterError
 
 
 def test_rsrreverser_clean_parameter_simple():

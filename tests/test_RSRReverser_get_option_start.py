@@ -1,4 +1,4 @@
-from rsr_reverse import RSRReverser
+from reverser import RSRReverser
 
 
 def test_rsrreverse_get_option_start_start():

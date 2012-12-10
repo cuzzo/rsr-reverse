@@ -1,4 +1,4 @@
-from rsr_reverse import RSRReverser
+from reverser import RSRReverser
 
 
 def test_rsrreverser_substitute_parameters_all_params():

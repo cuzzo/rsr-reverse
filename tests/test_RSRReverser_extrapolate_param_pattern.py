@@ -1,4 +1,4 @@
-from rsr_reverse import RSRReverser, RSR_TYPE_PATTERN
+from reverser import RSRReverser, RSR_TYPE_PATTERN
 
 def test_rsrreverser_extrapolate_param_pattern_plain():
     reverser = RSRReverser('')
